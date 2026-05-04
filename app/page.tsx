@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -299,6 +300,17 @@ const handleManageSubscription = async () => {
             </a>
           </div>
         </div>
+        
+<div className="mt-12 pt-6 border-t border-white/10 text-center text-slate-500 text-xs">
+          <Link href="/privacy" className="hover:text-slate-300 transition">
+            Privacy Policy
+          </Link>
+          <span className="mx-2">·</span>
+          <a href="mailto:coldcosmas@gmail.com" className="hover:text-slate-300 transition">
+            Contact
+          </a>
+        </div>
+
       </div>
     </main>
   );
