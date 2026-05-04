@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "InstantCoverLetter.ai - Free AI Cover Letter Generator",
   description: "Generate tailored cover letters in seconds with AI. 100% free, no signup required.",
   other: {
-    "impact-site-verification": "d7efa8ff-fff5-4824-93e1-9a38fd81395f",
+    "impact-site-verification": 'd7efa8ff-fff5-4824-93e1-9a38fd81395f',
   },
 };
 
