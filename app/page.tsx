@@ -287,16 +287,61 @@ const handleManageSubscription = async () => {
           </div>
         )}
 
-        <div className="mt-12 text-center text-slate-400 text-sm">
-          <p className="mb-3">💼 Boost your job search</p>
-          <div className="flex justify-center gap-6 flex-wrap">
+                <div className="mt-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8">
+          <h3 className="text-center text-white font-bold text-lg mb-1">
+            🚀 Land the job — recommended next steps
+          </h3>
+          <p className="text-center text-slate-400 text-sm mb-6">
+            Tools we trust to give you an edge in your job search
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Resume.io */}
             <a
               href="https://resumeio.sjv.io/2RW0ZO"
               target="_blank"
               rel="noopener sponsored"
-              className="text-indigo-300 hover:text-indigo-200 hover:underline transition"
+              className="block p-5 bg-slate-900/60 hover:bg-slate-800/60 border border-white/10 hover:border-indigo-400/40 rounded-2xl transition group"
             >
-              Build a Resume →
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-2xl">📄</span>
+                <span className="text-xs px-2 py-0.5 bg-indigo-500/20 text-indigo-300 rounded-full">
+                  DIY BUILDER
+                </span>
+              </div>
+              <h4 className="font-bold text-white group-hover:text-indigo-300 mb-1">
+                Resume.io
+              </h4>
+              <p className="text-sm text-slate-400 mb-3">
+                Build a polished, ATS-friendly resume in minutes with 30+ templates.
+              </p>
+              <span className="text-xs text-indigo-300 font-semibold">
+                Build my resume →
+              </span>
+            </a>
+
+            {/* TopResume */}
+            <a
+              href="https://topresume.sjv.io/YVy36J"
+              target="_blank"
+              rel="noopener sponsored"
+              className="block p-5 bg-slate-900/60 hover:bg-slate-800/60 border border-white/10 hover:border-purple-400/40 rounded-2xl transition group"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-2xl">👔</span>
+                <span className="text-xs px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded-full">
+                  EXPERT REVIEW
+                </span>
+              </div>
+              <h4 className="font-bold text-white group-hover:text-purple-300 mb-1">
+                TopResume
+              </h4>
+              <p className="text-sm text-slate-400 mb-3">
+                Get a free expert review from a certified resume writer. Used by millions.
+              </p>
+              <span className="text-xs text-purple-300 font-semibold">
+                Get my free review →
+              </span>
             </a>
           </div>
         </div>
