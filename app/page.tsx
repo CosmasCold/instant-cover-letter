@@ -131,6 +131,31 @@ export default function Home() {
           </div>
         )}
 
+        {letter && (
+  <div className="mt-6 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-3xl p-6 md:p-8 text-center">
+    <div className="inline-block mb-3 px-3 py-1 bg-yellow-400/20 border border-yellow-400/30 rounded-full text-xs font-semibold text-yellow-300">
+      💡 RECOMMENDED NEXT STEP
+    </div>
+    <h3 className="text-2xl font-bold text-white mb-2">
+      Now make your resume match
+    </h3>
+    <p className="text-slate-300 mb-5 text-sm md:text-base max-w-md mx-auto">
+      A great cover letter needs an ATS-friendly resume to back it up. Build one in minutes with Resume.io.
+    </p>
+    <a
+      href="https://resumeio.sjv.io/2RW0ZO"
+      target="_blank"
+      rel="noopener sponsored"
+      className="inline-block bg-white text-slate-900 hover:bg-slate-200 font-bold px-8 py-3 rounded-xl transition shadow-lg"
+    >
+      Build my resume on Resume.io →
+    </a>
+    <p className="text-xs text-slate-400 mt-3">
+      ✓ ATS-optimized · ✓ 30+ templates · ✓ Used by 7M+ job seekers
+    </p>
+  </div>
+)}
+
         <div className="mt-12 text-center text-slate-400 text-sm">
           <p className="mb-3">💼 Boost your job search</p>
           <div className="flex justify-center gap-6 flex-wrap">
@@ -143,7 +168,7 @@ export default function Home() {
               ZipRecruiter →
             </a>
             <a
-              href="https://resume.io/"
+              href="https://resumeio.sjv.io/2RW0ZO"
               target="_blank"
               rel="noopener"
               className="text-indigo-300 hover:text-indigo-200 hover:underline transition"
