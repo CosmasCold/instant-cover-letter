@@ -1,14 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const [name, setName] = useState("");
   const [experience, setExperience] = useState("");
   const [jobDescription, setJobDescription] = useState("");
+  const [tone, setTone] = useState("Professional");
   const [letter, setLetter] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isPro, setIsPro] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+
+  // Check for ?success=true after Stripe redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true") {
+      const sessionId = params.get("session_id");
+      if (sessionId) {
+        fetch("/api/verify-pro", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.pro) {
+              setIsPro(true);
+              alert("🎉 Welcome to Pro! Enjoy unlimited cover letters.");
+              window.history.replaceState({}, "", "/");
+            }
+          });
+      }
+    }
+  }, []);
 
   const handleGenerate = async () => {
     if (!experience.trim() || !jobDescription.trim()) {
@@ -21,17 +47,47 @@ export default function Home() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, experience, jobDescription }),
+        body: JSON.stringify({ name, experience, jobDescription, tone }),
       });
       const data = await res.json();
-      if (data.letter) setLetter(data.letter);
-      else alert("Something went wrong. Try again.");
+      if (res.status === 429) {
+        setShowUpgrade(true);
+        return;
+      }
+      if (data.letter) {
+        setLetter(data.letter);
+        if (data.isPro) setIsPro(true);
+      } else {
+        alert("Something went wrong. Try again.");
+      }
     } catch {
       alert("Network error. Try again.");
     } finally {
       setLoading(false);
     }
   };
+
+  const handleUpgrade = async () => {
+    try {
+      const res = await fetch("/api/checkout", { method: "POST" });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else alert("Could not start checkout. Try again.");
+    } catch {
+      alert("Network error.");
+    }
+  };
+
+const handleManageSubscription = async () => {
+  try {
+    const res = await fetch("/api/portal", { method: "POST" });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else alert("Could not open subscription portal. Try again.");
+  } catch {
+    alert("Network error.");
+  }
+};
 
   const handleCopy = () => {
     navigator.clipboard.writeText(letter);
@@ -41,15 +97,24 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 py-16 px-4 relative overflow-hidden">
-      {/* Decorative background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-3xl mx-auto relative">
         <header className="text-center mb-12">
-          <div className="inline-block mb-4 px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-indigo-300 backdrop-blur">
-            ⚡ Powered by AI · 100% Free
-          </div>
+          <div className="inline-flex items-center gap-2 mb-4">
+  <div className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-indigo-300 backdrop-blur">
+    {isPro ? "💎 PRO MEMBER · Unlimited" : "⚡ Powered by AI · 100% Free"}
+  </div>
+  {isPro && (
+    <button
+      onClick={handleManageSubscription}
+      className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs font-medium text-slate-300 hover:text-white backdrop-blur transition"
+    >
+      Manage subscription
+    </button>
+  )}
+</div>
           <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent leading-tight">
             InstantCoverLetter.ai
           </h1>
@@ -98,6 +163,28 @@ export default function Home() {
             />
           </div>
 
+          <div>
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-200 mb-2">
+              Tone
+              {!isPro && (
+                <span className="text-xs px-2 py-0.5 bg-yellow-400/20 text-yellow-300 rounded-full">
+                  PRO
+                </span>
+              )}
+            </label>
+            <select
+              value={tone}
+              onChange={(e) => setTone(e.target.value)}
+              disabled={!isPro}
+              className="w-full px-4 py-3 bg-slate-900/60 border border-white/10 text-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option>Professional</option>
+              <option>Casual</option>
+              <option>Bold</option>
+              <option>Creative</option>
+            </select>
+          </div>
+
           <button
             onClick={handleGenerate}
             disabled={loading}
@@ -113,6 +200,40 @@ export default function Home() {
             )}
           </button>
         </div>
+
+        {showUpgrade && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-900 border border-white/10 rounded-3xl p-8 max-w-md text-center">
+              <div className="text-5xl mb-3">💎</div>
+              <h2 className="text-2xl font-bold mb-2">Daily limit reached</h2>
+              <p className="text-slate-400 mb-6">
+                Free users get 2 letters per day. Upgrade to Pro for unlimited generations + tone selection.
+              </p>
+              <div className="bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-2xl p-5 mb-6">
+                <div className="text-3xl font-bold text-white">
+                  \$7<span className="text-lg text-slate-400">/month</span>
+                </div>
+                <ul className="text-sm text-slate-300 mt-3 space-y-1 text-left">
+                  <li>✓ Unlimited cover letters</li>
+                  <li>✓ 4 tone styles (Professional/Casual/Bold/Creative)</li>
+                  <li>✓ Cancel anytime</li>
+                </ul>
+              </div>
+              <button
+                onClick={handleUpgrade}
+                className="w-full bg-white text-slate-900 hover:bg-slate-200 font-bold py-3 rounded-xl mb-2"
+              >
+                Upgrade to Pro →
+              </button>
+              <button
+                onClick={() => setShowUpgrade(false)}
+                className="w-full text-slate-400 text-sm hover:text-slate-200 py-2"
+              >
+                Maybe later
+              </button>
+            </div>
+          </div>
+        )}
 
         {letter && (
           <div className="mt-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8">
@@ -131,46 +252,47 @@ export default function Home() {
           </div>
         )}
 
+        {letter && !isPro && (
+          <div className="mt-6 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-3xl p-6 text-center">
+            <p className="text-white font-semibold mb-2">
+              💎 Unlock unlimited generations + tone styles
+            </p>
+            <button
+              onClick={handleUpgrade}
+              className="inline-block bg-white text-slate-900 hover:bg-slate-200 font-bold px-6 py-2.5 rounded-xl transition"
+            >
+              Upgrade to Pro · \$7/mo
+            </button>
+          </div>
+        )}
+
         {letter && (
-  <div className="mt-6 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-3xl p-6 md:p-8 text-center">
-    <div className="inline-block mb-3 px-3 py-1 bg-yellow-400/20 border border-yellow-400/30 rounded-full text-xs font-semibold text-yellow-300">
-      💡 RECOMMENDED NEXT STEP
-    </div>
-    <h3 className="text-2xl font-bold text-white mb-2">
-      Now make your resume match
-    </h3>
-    <p className="text-slate-300 mb-5 text-sm md:text-base max-w-md mx-auto">
-      A great cover letter needs an ATS-friendly resume to back it up. Build one in minutes with Resume.io.
-    </p>
-    <a
-      href="https://resumeio.sjv.io/2RW0ZO"
-      target="_blank"
-      rel="noopener sponsored"
-      className="inline-block bg-white text-slate-900 hover:bg-slate-200 font-bold px-8 py-3 rounded-xl transition shadow-lg"
-    >
-      Build my resume on Resume.io →
-    </a>
-    <p className="text-xs text-slate-400 mt-3">
-      ✓ ATS-optimized · ✓ 30+ templates · ✓ Used by 7M+ job seekers
-    </p>
-  </div>
-)}
+          <div className="mt-6 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-3xl p-6 md:p-8 text-center">
+            <div className="inline-block mb-3 px-3 py-1 bg-yellow-400/20 border border-yellow-400/30 rounded-full text-xs font-semibold text-yellow-300">
+              💡 RECOMMENDED NEXT STEP
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-2">Now make your resume match</h3>
+            <p className="text-slate-300 mb-5 text-sm md:text-base max-w-md mx-auto">
+              A great cover letter needs an ATS-friendly resume to back it up. Build one in minutes with Resume.io.
+            </p>
+            <a
+              href="https://resumeio.sjv.io/2RW0ZO"
+              target="_blank"
+              rel="noopener sponsored"
+              className="inline-block bg-white text-slate-900 hover:bg-slate-200 font-bold px-8 py-3 rounded-xl transition shadow-lg"
+            >
+              Build my resume on Resume.io →
+            </a>
+          </div>
+        )}
 
         <div className="mt-12 text-center text-slate-400 text-sm">
           <p className="mb-3">💼 Boost your job search</p>
           <div className="flex justify-center gap-6 flex-wrap">
             <a
-              href="https://www.ziprecruiter.com/"
-              target="_blank"
-              rel="noopener"
-              className="text-indigo-300 hover:text-indigo-200 hover:underline transition"
-            >
-              ZipRecruiter →
-            </a>
-            <a
               href="https://resumeio.sjv.io/2RW0ZO"
               target="_blank"
-              rel="noopener"
+              rel="noopener sponsored"
               className="text-indigo-300 hover:text-indigo-200 hover:underline transition"
             >
               Build a Resume →
