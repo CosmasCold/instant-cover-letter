@@ -16,8 +16,64 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "InstantCoverLetter.ai - Free AI Cover Letter Generator",
-  description: "Generate tailored cover letters in seconds with AI. 100% free, no signup required.",
+  title: {
+    default: "Free AI Cover Letter Generator – No Signup | InstantCoverLetter.ai",
+    template: "%s | InstantCoverLetter.ai",
+  },
+  description:
+    "Generate tailored cover letters in seconds with AI. 100% free, no signup, no email required. Paste your background + job description and get a custom letter ready to send.",
+  keywords: [
+    "cover letter generator",
+    "AI cover letter",
+    "free cover letter",
+    "cover letter writer",
+    "job application",
+    "resume cover letter",
+    "tailored cover letter",
+  ],
+  authors: [{ name: "InstantCoverLetter.ai" }],
+  creator: "InstantCoverLetter.ai",
+  metadataBase: new URL("https://instant-cover-letter-steel.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Free AI Cover Letter Generator – No Signup",
+    description:
+      "Generate tailored cover letters in seconds. Free, no signup. Paste your background + job description, get a letter instantly.",
+    url: "https://instant-cover-letter-steel.vercel.app",
+    siteName: "InstantCoverLetter.ai",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "InstantCoverLetter.ai - Free AI Cover Letter Generator",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free AI Cover Letter Generator – No Signup",
+    description:
+      "Generate tailored cover letters in seconds. Free, no signup, no email.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+  google: "8rodz_1_naflPsfuuqYAUy_CHbm7v5QEE-9r2UvCkFI",
+},
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
