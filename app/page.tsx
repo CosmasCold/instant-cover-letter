@@ -347,6 +347,10 @@ const handleManageSubscription = async () => {
         </div>
         
 <div className="mt-12 pt-6 border-t border-white/10 text-center text-slate-500 text-xs">
+<Link href="/blog" className="hover:text-slate-300 transition">
+    Blog
+  </Link>
+  <span className="mx-2">·</span>
           <Link href="/privacy" className="hover:text-slate-300 transition">
             Privacy Policy
           </Link>
