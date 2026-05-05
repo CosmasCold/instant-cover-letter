@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import Link from "next/link";
+import BlogIndexClient from "../components/BlogIndexClient";
 
 export const metadata = {
   title: "Blog · Career & Cover Letter Tips",
@@ -18,15 +18,11 @@ interface PostMeta {
 
 function getPosts(): PostMeta[] {
   const postsDir = path.join(process.cwd(), "posts");
-  console.log("🔍 Looking for posts in:", postsDir);
-  console.log("🔍 Folder exists?", fs.existsSync(postsDir));
-
   if (!fs.existsSync(postsDir)) return [];
 
-  const files = fs.readdirSync(postsDir).filter((f) => f.endsWith(".md"));
-  console.log("🔍 Files found:", files);
-
-  return files
+  return fs
+    .readdirSync(postsDir)
+    .filter((f) => f.endsWith(".md"))
     .map((file) => {
       const fullPath = path.join(postsDir, file);
       const content = fs.readFileSync(fullPath, "utf8");
@@ -43,53 +39,5 @@ function getPosts(): PostMeta[] {
 
 export default function BlogIndex() {
   const posts = getPosts();
-
-  return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-16 px-4">
-      <div className="max-w-3xl mx-auto">
-        <Link
-          href="/"
-          className="text-indigo-300 hover:text-indigo-200 text-sm mb-8 inline-block"
-        >
-          ← Back to home
-        </Link>
-
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-          Career & Cover Letter Blog
-        </h1>
-        <p className="text-slate-400 mb-12">
-          Real, no-fluff advice on cover letters, resumes, and job searching.
-        </p>
-
-        {posts.length === 0 ? (
-          <p className="text-slate-400">
-            New posts coming soon. In the meantime, try the{" "}
-            <Link href="/" className="text-indigo-300 hover:underline">
-              free cover letter generator
-            </Link>
-            .
-          </p>
-        ) : (
-          <div className="space-y-6">
-            {posts.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="block bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl p-6 transition"
-              >
-                <p className="text-xs text-slate-500 mb-2">{post.date}</p>
-                <h2 className="text-2xl font-bold text-white mb-2">
-                  {post.title}
-                </h2>
-                <p className="text-slate-300 text-sm">{post.description}</p>
-                <span className="inline-block mt-3 text-indigo-300 text-sm font-semibold">
-                  Read article →
-                </span>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-    </main>
-  );
+  return <BlogIndexClient posts={posts} />;
 }

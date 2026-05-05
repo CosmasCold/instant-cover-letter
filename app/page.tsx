@@ -4,6 +4,18 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { jsPDF } from "jspdf";
 
+interface ToastItem {
+  id: number;
+  msg: string;
+  type: string;
+}
+
+interface FaqItemProps {
+  q: string;
+  a: string;
+  dm: boolean;
+}
+
 function Toast({ toasts }) {
   return (
     <div className="fixed top-4 right-4 z-[100] space-y-2 pointer-events-none">
@@ -325,7 +337,11 @@ Alex Johnson`);
         {/* Dark / Light toggle */}
         <div className="flex justify-end mb-4">
           <button
-            onClick={() => setDarkMode(!dm)}
+            onClick={() => {
+  const next = !dm;
+  setDarkMode(next);
+  localStorage.setItem("darkMode", next.toString());
+}}
             aria-label={dm ? "Switch to light mode" : "Switch to dark mode"}
             className={`px-3 py-1.5 rounded-full border text-xs font-medium transition ${
               dm
