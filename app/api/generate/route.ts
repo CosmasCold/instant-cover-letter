@@ -17,7 +17,8 @@ function verifyCookie(signed: string | undefined): boolean {
 
 export async function POST(req: NextRequest) {
   try {
-    const { jobDescription, experience, name, tone } = await req.json();
+    // ← CHANGED: added linkedInAbout
+    const { jobDescription, experience, name, tone, linkedInAbout } = await req.json();
 
     if (!jobDescription || !experience) {
       return NextResponse.json(
@@ -32,6 +33,7 @@ export async function POST(req: NextRequest) {
 
     // Free user rate limiting (cookie-based)
     let newUsage: string | null = null;
+    let remaining = FREE_DAILY_LIMIT; // ← CHANGED: track remaining count
     if (!isPro) {
       const today = new Date().toISOString().slice(0, 10);
       const usageCookie = req.cookies.get("usage")?.value || "";
@@ -49,18 +51,24 @@ export async function POST(req: NextRequest) {
       }
 
       newUsage = `${today}|${count + 1}`;
+      remaining = FREE_DAILY_LIMIT - (count + 1); // ← CHANGED: calculate remaining after this generation
     }
 
     // Tone (Pro-only feature)
     const toneInstruction =
       isPro && tone ? `Write in a ${tone} tone.` : "Write in a professional tone.";
 
+    // ← CHANGED: added linkedInAbout to prompt if provided
+    const linkedInSection = linkedInAbout
+      ? `\nCandidate's LinkedIn About section (use this to add personality):\n${linkedInAbout}`
+      : "";
+
     const prompt = `You are a professional career coach. Write a compelling, concise cover letter (under 300 words) for the following job. ${toneInstruction} Make it confident, specific, and avoid clichés like "I am writing to apply".
 
 Candidate name: ${name || "the candidate"}
 
 Candidate background and experience:
-${experience}
+${experience}${linkedInSection}
 
 Job description:
 ${jobDescription}
@@ -75,7 +83,9 @@ Write only the cover letter, no preamble.`;
     });
 
     const letter = completion.choices[0]?.message?.content || "";
-    const res = NextResponse.json({ letter, isPro });
+
+    // ← CHANGED: added remaining to response
+    const res = NextResponse.json({ letter, isPro, remaining });
 
     // Set updated usage cookie for free users
     if (!isPro && newUsage) {

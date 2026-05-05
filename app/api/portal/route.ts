@@ -16,8 +16,19 @@ function verifyAndExtract(signed: string | undefined): string | null {
 
 export async function POST(req: NextRequest) {
   try {
-    const customerCookie = req.cookies.get("customer_token")?.value;
-    const customerId = verifyAndExtract(customerCookie);
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    // Try customer_token first
+    let customerId = verifyAndExtract(req.cookies.get("customer_token")?.value);
+
+    // Fallback: derive customer ID from pro_token (subscription ID)
+    if (!customerId) {
+      const subscriptionId = verifyAndExtract(req.cookies.get("pro_token")?.value);
+      if (subscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        customerId = subscription.customer as string;
+      }
+    }
 
     if (!customerId) {
       return NextResponse.json(
@@ -25,8 +36,6 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
     }
-
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,
