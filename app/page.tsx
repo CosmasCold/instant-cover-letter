@@ -16,7 +16,7 @@ interface FaqItemProps {
   dm: boolean;
 }
 
-function Toast({ toasts }) {
+function Toast({ toasts }: { toasts: ToastItem[] }) {
   return (
     <div className="fixed top-4 right-4 z-[100] space-y-2 pointer-events-none">
       {toasts.map((t) => (
@@ -37,7 +37,7 @@ function Toast({ toasts }) {
   );
 }
 
-function FAQItem({ q, a, dm }) {
+function FAQItem({ q, a, dm }: FaqItemProps) {
   const [open, setOpen] = useState(false);
   return (
     <div
@@ -102,22 +102,27 @@ export default function Home() {
   const [letter, setLetter] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [isPro, setIsPro] = useState(false);
+  const [isPro, setIsPro] = useState<boolean>(() => {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem("isPro") === "true";
+});
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [lettersRemaining, setLettersRemaining] = useState(2);
-  const [toasts, setToasts] = useState([]);
-  const [darkMode, setDarkMode] = useState(true);
-  const [wordCount, setWordCount] = useState(0);
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+  if (typeof window === "undefined") return true;
+  const saved = localStorage.getItem("darkMode");
+  return saved !== null ? saved === "true" : true;
+});
   const [isSample, setIsSample] = useState(false);
-  const letterRef = useRef(null);
-    const addToast = (msg, type = "error") => {
+  const letterRef = useRef<HTMLDivElement>(null);
+    const addToast = (msg: string, type: string = "error") => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, msg, type }]);
     setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 4000);
   };
 
   useEffect(() => {
-    if (localStorage.getItem("isPro") === "true") setIsPro(true);
 
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
@@ -142,15 +147,15 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (letter) {
-      const words = letter.trim().split(/\s+/).filter(Boolean).length;
-      setWordCount(words);
-      setTimeout(
-        () => letterRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
-        100
-      );
-    }
-  }, [letter]);
+  if (letter) {
+    setTimeout(
+      () => letterRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      100
+    );
+  }
+}, [letter]);
+
+const wordCount = letter.trim().split(/\s+/).filter(Boolean).length;
 
   const handleGenerate = async () => {
     if (!experience.trim() || !jobDescription.trim()) {
@@ -244,7 +249,7 @@ export default function Home() {
   addToast("Form cleared.", "info");
 };
 
-  const handleShare = (platform) => {
+  const handleShare = (platform: string) => {
     const text =
       "Just generated my cover letter with InstantCoverLetter.ai — free AI cover letters in seconds! 🚀";
     if (platform === "twitter") {
