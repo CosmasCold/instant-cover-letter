@@ -84,6 +84,6 @@ The #1 mistake: sending the exact same letter to 100 jobs.
 
 Manually customizing every cover letter takes 30+ minutes per application. That's why most people give up and send generic ones.
 
-**[InstantCoverLetter.ai](/)** generates tailored letters in 3 seconds — just paste your background and the job description. It naturally avoids most of these mistakes by analyzing the job posting and weaving in specifics.
+**[Our free cover letter generator](/)** generates tailored letters in 3 seconds — just paste your background and the job description. It naturally avoids most of these mistakes by analyzing the job posting and weaving in specifics.
 
 Free for 2 letters/day. Pro is $7/month for unlimited.
