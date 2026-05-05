@@ -14,7 +14,6 @@ export default function Home() {
   const [isPro, setIsPro] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
-  // Check for ?success=true after Stripe redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("success") === "true") {
@@ -79,16 +78,16 @@ export default function Home() {
     }
   };
 
-const handleManageSubscription = async () => {
-  try {
-    const res = await fetch("/api/portal", { method: "POST" });
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
-    else alert("Could not open subscription portal. Try again.");
-  } catch {
-    alert("Network error.");
-  }
-};
+  const handleManageSubscription = async () => {
+    try {
+      const res = await fetch("/api/portal", { method: "POST" });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else alert("Could not open subscription portal. Try again.");
+    } catch {
+      alert("Network error.");
+    }
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(letter);
@@ -102,20 +101,22 @@ const handleManageSubscription = async () => {
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-3xl mx-auto relative">
+
+        {/* Header */}
         <header className="text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-4">
-  <div className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-indigo-300 backdrop-blur">
-    {isPro ? "💎 PRO MEMBER · Unlimited" : "⚡ Powered by AI · 100% Free"}
-  </div>
-  {isPro && (
-    <button
-      onClick={handleManageSubscription}
-      className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs font-medium text-slate-300 hover:text-white backdrop-blur transition"
-    >
-      Manage subscription
-    </button>
-  )}
-</div>
+            <div className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-indigo-300 backdrop-blur">
+              {isPro ? "💎 PRO MEMBER · Unlimited" : "⚡ Powered by AI · 100% Free"}
+            </div>
+            {isPro && (
+              <button
+                onClick={handleManageSubscription}
+                className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs font-medium text-slate-300 hover:text-white backdrop-blur transition"
+              >
+                Manage subscription
+              </button>
+            )}
+          </div>
           <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent leading-tight">
             InstantCoverLetter.ai
           </h1>
@@ -124,6 +125,7 @@ const handleManageSubscription = async () => {
           </p>
         </header>
 
+        {/* Form */}
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8 space-y-6">
           <div>
             <label className="block text-sm font-semibold text-slate-200 mb-2">
@@ -202,6 +204,7 @@ const handleManageSubscription = async () => {
           </button>
         </div>
 
+        {/* Upgrade Modal */}
         {showUpgrade && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-slate-900 border border-white/10 rounded-3xl p-8 max-w-md text-center">
@@ -236,6 +239,7 @@ const handleManageSubscription = async () => {
           </div>
         )}
 
+        {/* Letter Output */}
         {letter && (
           <div className="mt-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8">
             <div className="flex justify-between items-center mb-5">
@@ -253,6 +257,7 @@ const handleManageSubscription = async () => {
           </div>
         )}
 
+        {/* Pro Upsell (free users after generating) */}
         {letter && !isPro && (
           <div className="mt-6 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-3xl p-6 text-center">
             <p className="text-white font-semibold mb-2">
@@ -267,6 +272,7 @@ const handleManageSubscription = async () => {
           </div>
         )}
 
+        {/* Resume.io Affiliate CTA (after letter) */}
         {letter && (
           <div className="mt-6 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-3xl p-6 md:p-8 text-center">
             <div className="inline-block mb-3 px-3 py-1 bg-yellow-400/20 border border-yellow-400/30 rounded-full text-xs font-semibold text-yellow-300">
@@ -274,7 +280,7 @@ const handleManageSubscription = async () => {
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">Now make your resume match</h3>
             <p className="text-slate-300 mb-5 text-sm md:text-base max-w-md mx-auto">
-              A great cover letter needs an ATS-friendly resume to back it up. Build one in minutes with Resume.io.
+              A great cover letter needs an ATS-friendly resume to back it up. Build one in minutes.
             </p>
             <a
               href="https://resumeio.sjv.io/2RW0ZO"
@@ -287,16 +293,15 @@ const handleManageSubscription = async () => {
           </div>
         )}
 
-                <div className="mt-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8">
+        {/* Affiliate Tools Section */}
+        <div className="mt-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8">
           <h3 className="text-center text-white font-bold text-lg mb-1">
             🚀 Land the job — recommended next steps
           </h3>
           <p className="text-center text-slate-400 text-sm mb-6">
             Tools we trust to give you an edge in your job search
           </p>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Resume.io */}
             <a
               href="https://resumeio.sjv.io/2RW0ZO"
               target="_blank"
@@ -309,18 +314,12 @@ const handleManageSubscription = async () => {
                   DIY BUILDER
                 </span>
               </div>
-              <h4 className="font-bold text-white group-hover:text-indigo-300 mb-1">
-                Resume.io
-              </h4>
+              <h4 className="font-bold text-white group-hover:text-indigo-300 mb-1">Resume.io</h4>
               <p className="text-sm text-slate-400 mb-3">
                 Build a polished, ATS-friendly resume in minutes with 30+ templates.
               </p>
-              <span className="text-xs text-indigo-300 font-semibold">
-                Build my resume →
-              </span>
+              <span className="text-xs text-indigo-300 font-semibold">Build my resume →</span>
             </a>
-
-            {/* TopResume */}
             <a
               href="https://topresume.sjv.io/YVy36J"
               target="_blank"
@@ -333,31 +332,108 @@ const handleManageSubscription = async () => {
                   EXPERT REVIEW
                 </span>
               </div>
-              <h4 className="font-bold text-white group-hover:text-purple-300 mb-1">
-                TopResume
-              </h4>
+              <h4 className="font-bold text-white group-hover:text-purple-300 mb-1">TopResume</h4>
               <p className="text-sm text-slate-400 mb-3">
                 Get a free expert review from a certified resume writer. Used by millions.
               </p>
-              <span className="text-xs text-purple-300 font-semibold">
-                Get my free review →
-              </span>
+              <span className="text-xs text-purple-300 font-semibold">Get my free review →</span>
             </a>
           </div>
         </div>
-        
-<div className="mt-12 pt-6 border-t border-white/10 text-center text-slate-500 text-xs">
-<Link href="/blog" className="hover:text-slate-300 transition">
-    Blog
-  </Link>
-  <span className="mx-2">·</span>
-          <Link href="/privacy" className="hover:text-slate-300 transition">
-            Privacy Policy
-          </Link>
-          <span className="mx-2">·</span>
-          <a href="mailto:coldcosmas@gmail.com" className="hover:text-slate-300 transition">
-            Contact
-          </a>
+
+        {/* FAQ Section */}
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold text-white text-center mb-8">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            <details className="bg-white/5 border border-white/10 rounded-xl p-5 cursor-pointer">
+              <summary className="font-semibold text-white">
+                Is InstantCoverLetter.ai really free?
+              </summary>
+              <p className="mt-3 text-slate-300 text-sm">
+                Yes. The free tier gives you 2 cover letters per day, no signup or credit card required.
+                Pro (\$7/month) unlocks unlimited generations and tone selection.
+              </p>
+            </details>
+            <details className="bg-white/5 border border-white/10 rounded-xl p-5 cursor-pointer">
+              <summary className="font-semibold text-white">
+                Will my cover letter pass ATS systems?
+              </summary>
+              <p className="mt-3 text-slate-300 text-sm">
+                Yes. Our AI generates plain text letters with industry-standard formatting that ATS
+                systems can parse easily. For best results, pair with an ATS-optimized resume.
+              </p>
+            </details>
+            <details className="bg-white/5 border border-white/10 rounded-xl p-5 cursor-pointer">
+              <summary className="font-semibold text-white">
+                Do you store my resume or job description data?
+              </summary>
+              <p className="mt-3 text-slate-300 text-sm">
+                No. Your input is sent to our AI provider only to generate your letter. We don&apos;t
+                save it on our servers afterward. See our Privacy Policy for full details.
+              </p>
+            </details>
+            <details className="bg-white/5 border border-white/10 rounded-xl p-5 cursor-pointer">
+              <summary className="font-semibold text-white">
+                How is this different from ChatGPT?
+              </summary>
+              <p className="mt-3 text-slate-300 text-sm">
+                We use a specialized prompt optimized specifically for cover letters. No setup, no
+                prompt engineering — just paste your background and job description and get a
+                polished result in 3 seconds.
+              </p>
+            </details>
+            <details className="bg-white/5 border border-white/10 rounded-xl p-5 cursor-pointer">
+              <summary className="font-semibold text-white">
+                Can I cancel my Pro subscription anytime?
+              </summary>
+              <p className="mt-3 text-slate-300 text-sm">
+                Yes, anytime. Click &quot;Manage subscription&quot; while logged in as Pro and
+                you&apos;ll be redirected to Stripe&apos;s portal where you can cancel in one click.
+              </p>
+            </details>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-12 pt-6 border-t border-white/10 text-center space-y-4">
+
+          {/* Product Hunt Badge */}
+          <div className="flex justify-center">
+            <a
+              href="https://www.producthunt.com/products/instantcoverletter-ai?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-instantcoverletter-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                alt="InstantCoverLetter.ai - Free AI cover letters in seconds. No signup. | Product Hunt"
+                width={250}
+                height={54}
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1138932&theme=dark&t=1777999943128"
+                style={{ width: "250px", height: "54px" }}
+              />
+            </a>
+          </div>
+
+          {/* Footer Links */}
+          <div className="text-slate-500 text-xs">
+            <Link href="/blog" className="hover:text-slate-300 transition">
+              Blog
+            </Link>
+            <span className="mx-2">·</span>
+            <Link href="/privacy" className="hover:text-slate-300 transition">
+              Privacy Policy
+            </Link>
+            <span className="mx-2">·</span>
+            <a
+              href="mailto:coldcosmas@gmail.com"
+              className="hover:text-slate-300 transition"
+            >
+              Contact
+            </a>
+          </div>
+
         </div>
 
       </div>
