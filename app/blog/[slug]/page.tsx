@@ -51,7 +51,7 @@ export default async function BlogPost({ params }: PageProps) {
   if (!post) notFound();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-16 px-4 transition-colors duration-300">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-16 px-4 transition-colors duration-300">
       <div className="max-w-3xl mx-auto">
 
         <div className="flex justify-end mb-4">
@@ -59,28 +59,28 @@ export default async function BlogPost({ params }: PageProps) {
         </div>
 
         <Link
-          href="/blog"
-          className="text-indigo-300 hover:text-indigo-200 text-sm mb-8 inline-block transition"
-        >
-          ← All articles
-        </Link>
+  href="/blog"
+  className="text-indigo-500 dark:text-indigo-300 hover:text-indigo-400 text-sm mb-8 inline-block transition"
+>
+  ← All articles
+</Link>
 
         <article>
-          <p className="text-xs text-slate-500 mb-3">{post!.date}</p>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+          <p className="text-xs text-slate-400 dark:text-slate-500 mb-3">{post!.date}</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
             {post!.title}
           </h1>
           <div
-            className="article-content article-dark"
-            dangerouslySetInnerHTML={{ __html: post!.contentHtml }}
-          />
+  className="article-content article-dark dark:article-dark"
+  dangerouslySetInnerHTML={{ __html: post!.contentHtml }}
+/>
         </article>
 
         <div className="mt-16 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-3xl p-8 text-center">
-          <h3 className="text-2xl font-bold text-white mb-2">
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
             Need a cover letter right now?
           </h3>
-          <p className="text-slate-300 mb-5">
+          <p className="text-slate-500 dark:text-slate-300 mb-5">
             Generate a tailored one in seconds. Free, no signup.
           </p>
           <Link

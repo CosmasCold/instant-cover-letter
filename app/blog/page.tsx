@@ -42,7 +42,7 @@ export default function BlogIndex() {
   const posts = getPosts();
 
   return (
-    <main className="min-h-screen bg-slate-950 dark:bg-slate-950 light:bg-slate-50 text-slate-100 py-16 px-4 transition-colors duration-300">
+   <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-16 px-4 transition-colors duration-300">
       <div className="max-w-3xl mx-auto">
 
         <div className="flex justify-end mb-4">
@@ -51,15 +51,15 @@ export default function BlogIndex() {
 
         <Link
           href="/"
-          className="text-indigo-300 hover:text-indigo-200 text-sm mb-8 inline-block transition"
+          className="text-indigo-500 dark:text-indigo-300 hover:text-indigo-400 text-sm mb-8 inline-block transition"
         >
           ← Back to home
         </Link>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-3 text-white dark:text-white">
+        <h1 className="text-4xl md:text-5xl font-bold mb-3 text-slate-900 dark:text-white">
           Career & Cover Letter Blog
         </h1>
-        <p className="text-slate-400 mb-12">
+        <p className="text-slate-500 dark:text-slate-400 mb-12">
           Real, no-fluff advice on cover letters, resumes, and job searching.
         </p>
 
@@ -79,12 +79,12 @@ export default function BlogIndex() {
                 href={`/blog/${post.slug}`}
                 className="block bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl p-6 transition"
               >
-                <p className="text-xs text-slate-500 mb-2">{post.date}</p>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <p className="text-xs text-slate-400 dark:text-slate-500 mb-2">{post.date}</p>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                   {post.title}
                 </h2>
-                <p className="text-slate-400 text-sm">{post.description}</p>
-                <span className="inline-block mt-3 text-indigo-300 text-sm font-semibold">
+                <p className="text-slate-500 dark:text-slate-400 text-sm">{post.description}</p>
+                <span className="inline-block mt-3 text-indigo-500 dark:text-indigo-300 text-sm font-semibold">
                   Read article →
                 </span>
               </Link>
