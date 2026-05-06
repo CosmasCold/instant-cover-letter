@@ -6,6 +6,7 @@ import html from "remark-html";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ThemeToggle from "../ThemeToggle";
+import ArticleContent from "../ArticleContent";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -70,10 +71,7 @@ export default async function BlogPost({ params }: PageProps) {
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
             {post!.title}
           </h1>
-          <div
-  className="article-content article-dark dark:article-dark"
-  dangerouslySetInnerHTML={{ __html: post!.contentHtml }}
-/>
+          <ArticleContent html={post!.contentHtml} />
         </article>
 
         <div className="mt-16 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30 rounded-3xl p-8 text-center">
