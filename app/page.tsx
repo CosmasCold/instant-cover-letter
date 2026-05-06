@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { jsPDF } from "jspdf";
 
 interface ToastItem {
@@ -819,13 +820,12 @@ Alex Johnson`);
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img
-                alt="InstantCoverLetter.ai - Free AI cover letters in seconds. No signup. | Product Hunt"
-                width={250}
-                height={54}
-                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1138932&theme=dark&t=1777999943128"
-                style={{ width: "250px", height: "54px" }}
-              />
+            <Image
+  alt="InstantCoverLetter.ai - Free AI cover letters in seconds. No signup. | Product Hunt"
+  width={250}
+  height={54}
+  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1138932&theme=dark&t=1777999943128"
+/>
             </a>
           </div>
 
