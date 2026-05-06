@@ -5,6 +5,7 @@ import { remark } from "remark";
 import html from "remark-html";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ThemeToggle from "../ThemeToggle";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -50,8 +51,12 @@ export default async function BlogPost({ params }: PageProps) {
   if (!post) notFound();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-16 px-4">
+    <main className="min-h-screen bg-slate-950 text-slate-100 py-16 px-4 transition-colors duration-300">
       <div className="max-w-3xl mx-auto">
+
+        <div className="flex justify-end mb-4">
+          <ThemeToggle />
+        </div>
 
         <Link
           href="/blog"

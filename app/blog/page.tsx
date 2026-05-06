@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 export const metadata = {
   title: "Blog · Career & Cover Letter Tips",
@@ -41,8 +42,12 @@ export default function BlogIndex() {
   const posts = getPosts();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 py-16 px-4 transition-colors duration-300">
+    <main className="min-h-screen bg-slate-950 dark:bg-slate-950 light:bg-slate-50 text-slate-100 py-16 px-4 transition-colors duration-300">
       <div className="max-w-3xl mx-auto">
+
+        <div className="flex justify-end mb-4">
+          <ThemeToggle />
+        </div>
 
         <Link
           href="/"
@@ -51,7 +56,7 @@ export default function BlogIndex() {
           ← Back to home
         </Link>
 
-        <h1 className="text-4xl md:text-5xl font-bold mb-3 text-white">
+        <h1 className="text-4xl md:text-5xl font-bold mb-3 text-white dark:text-white">
           Career & Cover Letter Blog
         </h1>
         <p className="text-slate-400 mb-12">
