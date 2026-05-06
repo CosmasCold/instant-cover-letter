@@ -1,7 +1,7 @@
 ---
 title: "How to Write a Cover Letter for a Career Change (With Examples)"
 description: "Switching industries? Here's exactly how to write a cover letter that explains your career change and gets you interviews."
-date: "2025-01-28"
+date: "2026-05-06"
 ---
 
 ## Switching careers is hard. Your cover letter doesn't have to be.
